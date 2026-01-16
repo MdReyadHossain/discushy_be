@@ -33,11 +33,25 @@ io.on('connection', socket => {
 
     socket.on('toggle-mic', (roomId, user) => {
         console.log(`User ${user.userId} toggled mic. isMuted: ${user.isMuted}`);
+        // Update user state in rooms array
+        if (rooms[roomId]) {
+            const roomUser = rooms[roomId].find(u => u.userId === user.userId);
+            if (roomUser) {
+                roomUser.isMuted = user.isMuted;
+            }
+        }
         socket.to(roomId).emit('mic-toggled', user);
     });
 
     socket.on('toggle-camera', (roomId, user) => {
         console.log(`User ${user.userId} toggled camera. isCameraOff: ${user.isCameraOff}`);
+        // Update user state in rooms array
+        if (rooms[roomId]) {
+            const roomUser = rooms[roomId].find(u => u.userId === user.userId);
+            if (roomUser) {
+                roomUser.isCameraOff = user.isCameraOff;
+            }
+        }
         socket.to(roomId).emit('camera-toggled', user);
     });
 
